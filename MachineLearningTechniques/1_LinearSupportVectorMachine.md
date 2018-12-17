@@ -41,7 +41,24 @@ PLA可能会随机选择方案(最终结果与经过的错误点有关)<br>
 ---
 
 ### 3.Support Vector Machine 
+现在，条件和目标变成：<br>
+![3initgoal](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_3initgoal.png?raw=true)<br>
 
+Support Vector Machine(SVM)这个名字从何而来？为什么把这种分类面解法称为支持向量机呢？这是因为分类面仅仅由分类面的两边距离它最近的几个点决定的，其它点对分类面没有影响。决定分类面的几个点称之为支持向量（Support Vector），好比这些点“支撑”着分类面。而利用Support Vector得到最佳分类面的方法，称之为支持向量机（Support Vector Machine）。<br>
+
+***
+
+这是一个典型的二次规划问题，即Quadratic Programming（QP）。因为SVM的目标是关于w的二次函数，条件是关于w和b的一次函数，所以，它的求解过程还是比较容易的，可以使用一些软件（例如Matlab）自带的二次规划的库函数来求解。下图给出SVM与标准二次规划问题的参数对应关系：<br>
+![QP](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_QP.png?raw=true)<br>
+
+***
+
+那么，线性SVM算法可以总结为三步：<br>
+1.计算对应的二次规划参数Q，p，A，c<br>
+2.根据二次规划库函数，计算b，w<br>
+3.将b和w代入$g_{SVM}$，得到最佳分类面<br>
+
+![svmstep](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_svmstep.png?raw=true)<br>
 
 ---
 
