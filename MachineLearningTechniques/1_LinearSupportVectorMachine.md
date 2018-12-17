@@ -26,6 +26,17 @@ PLA可能会随机选择方案(最终结果与经过的错误点有关)<br>
 首先，我们将权重$w(w_0,w_1,\cdots,w_d)$中的$w_0$拿出来，用b表示(即截距)。同时省去$x_0$项。这样，hypothesis就变成了$h(x)=sign(w^Tx+b)$。<br>
 ![shorten_X_and_W](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_shortenXW.png?raw=true)<br>
 ![distances](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_distances.png?raw=true)<br>
+目标形式转换为：<br>
+![goaldistances](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_goaldistance.png?raw=true)<br>
+进行简化：<br>
+![simplygoal](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_simplygoal.png?raw=true)<br>
+我们的目标就是根据这个条件，计算$\frac1{||w||}$的最大值。<br>
+
+***
+
+可以把目标$\frac1{||w||}$最大化转化为计算$\frac12w^Tw$的最小化问题<br>
+![finalgoal](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_finalgoal.png?raw=true)<br>
+最终的条件就是$y_n(w^Tx_n+b)\geq 1$，而我们的目标就是最小化$\frac12w^Tw$值。
 
 ---
 
