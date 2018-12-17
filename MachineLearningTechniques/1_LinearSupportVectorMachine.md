@@ -53,15 +53,26 @@ Support Vector Machine(SVM)这个名字从何而来？为什么把这种分类�
 
 ***
 
-那么，线性SVM算法可以总结为三步：<br>
+那么，**线性SVM**算法可以总结为三步：<br>
 1.计算对应的二次规划参数Q，p，A，c<br>
 2.根据二次规划库函数，计算b，w<br>
 3.将b和w代入$g_{SVM}$，得到最佳分类面<br>
 
 ![svmstep](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_svmstep.png?raw=true)<br>
+如果是非线性的，可以先用特征转换的方法，先做特征变换。将非线性的x域映射到线性的z域，再利用线性SVM算法进行求解。
 
 ---
 
 
 ### 4.Reasons behind Large-Margin Hyperplane
+SVM的思想与正则化regularization思想很类似。<br>
+![svm_vs_regularization](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/1_svmregu.png?raw=true)<br>
 
+***
+
+如果Dichotomies越少，那么复杂度就越低，即有效的VC Dimension就越小，得到$E_{out}\approx E_{in}$，泛化能力强。
+
+### 总结
+本节课主要介绍了线性支持向量机（Linear Support Vector Machine）。我们先从视觉角度出发，希望得到一个比较“胖”的分类面，即满足所有的点距离分类面都尽可能远。<br>
+然后，我们通过一步步推导和简化，最终把这个问题转换为标准的二次规划（QP）问题。二次规划问题可以使用软件来进行求解，得到我们要求的w和b，确定分类面。<br>
+这种方法背后的原理其实就是减少了dichotomies的种类，减少了有效的VC Dimension数量，从而让机器学习的模型具有更好的泛化能力。
