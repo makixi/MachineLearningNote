@@ -65,18 +65,55 @@ $$g_{SVM}(x)=sign(w^T\Phi(x)+b)=sign((\sum_{n=1}^N\alpha_ny_nz_n)^Tz+b)=sign(\su
 ---
 
 ### 2.Polynomial Kernel 
-二次多项式的kernel形式多样。
+二次多项式的kernel形式多样。<br>
 ![poly](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_poly.png?raw=true)<br>
+
 系数不同，内积就会有差异，就会代表不同的距离，最终可能会得到不同的SVM margin。
-所以，系数不同，可能会得到不同的SVM分界线。
+所以，系数不同，可能会得到不同的SVM分界线。<br>
 ![choose](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_choose.png?raw=true)<br>
 
+不同的转换，对应到不同的几何距离<br>
 ![distances](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_distances.png?raw=true)<br>
 
+引入$\zeta\geq 0$和$\gamma>0$，对于Q次多项式一般的kernel形式可表示为：<br>
+![kernel](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_kernel.png?raw=true)<br>
+
+所以，使用高阶的多项式kernel有两个优点:<br>
+1.得到最大SVM margin，SV数量不会太多，分类面不会太复杂，防止过拟合，减少复杂度<br>
+2.计算过程避免了对$\hat d$的依赖，大大简化了计算量。
 
 ---
 
 ### 3.Gaussian Kernel
+如果是无限多维的转换$\Phi(x)$，也还能通过kernel的思想，来简化SVM的计算
+先举个例子，简单起见，假设原空间是一维的，只有一个特征x，我们构造一个kernel function为高斯函数：
+
+$$K(x,x')=e^{-(x-x')^2}$$
+
+构造的过程正好与二次多项式kernel的相反，利用反推法，先将上式分解并做泰勒展开：
+![taylor](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_taylor.png?raw=true)<br>
+将构造的K(x,x')推导展开为两个$\Phi(x)$和$\Phi(x')$的乘积，其中：
+
+$$\Phi(x)=e^{-x^2}\cdot (1,\sqrt \frac{2}{1!}x,\sqrt \frac{2^2}{2!}x^2,\cdots)$$
+通过反推，我们得到了$\Phi(x)$，$\Phi(x)$是无限多维的，它就可以当成特征转换的函数，且$\hat d$是无限的。这种$\Phi(x)$得到的核函数即为Gaussian kernel。
+
+更一般地，对于原空间不止一维的情况（d>1），引入缩放因子$\gamma>0$，它对应的Gaussian kernel表达式为：
+
+$$K(x,x')=e^{-\gamma||x-x'||^2}$$
+
+那么引入了高斯核函数，将有限维度的特征转换拓展到无限的特征转换中。根据本节课上一小节的内容，由K，计算得到$\alpha_n$和b，进而得到矩$g_{SVM}$。将其中的核函数K用高斯核函数代替，得到：
+
+$$g_{SVM}(x)=sign(\sum_{SV}\alpha_ny_nK(x_n,x)+b)=sign(\sum_{SV}\alpha_ny_ne^{(-\gamma||x-x_n||^2)}+b)$$
+
+通过上式可以看出，$g_{SVM}$有n个高斯函数线性组合而成，其中n是SV的个数。而且，每个高斯函数的中心都是对应的SV。通常我们也把高斯核函数称为径向基函数（Radial Basis Function, RBF）。
+
+![rbf](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_rbf.png?raw=true)<br>
+
+缩放因子$\gamma$取值不同，会得到不同的高斯核函数，hyperplanes不同，分类效果也有很大的差异。举个例子，$\gamma$分别取1, 10, 100时对应的分类效果如下：<br>
+![hyper](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_hyper.png?raw=true)<br>
+从图中可以看出，当$\gamma$比较小的时候，分类线比较光滑，当$\gamma$越来越大的时候，分类线变得越来越复杂和扭曲。<br>
+因为$\gamma$越大，其对应的高斯核函数越尖瘦，那么有限个高斯核函数的线性组合就比较离散，分类效果并不好。<br>
+所以，SVM也会出现过拟合现象，$\gamma$的正确选择尤为重要，不能太大。
 
 ---
 
