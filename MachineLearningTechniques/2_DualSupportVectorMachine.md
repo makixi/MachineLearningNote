@@ -125,3 +125,27 @@ $q_{n,m}=y_ny_mz^T_nz_m$，大部分值是非零的，称为dense。<br>
 ---
 
 ### 4.Messages behind Dual SVM 
+![message](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_message.png?raw=true)<br>
+把位于分类线边界上的点称为support vector（candidates）。<br>
+$\alpha_n$>0的点一定落在分类线边界上，这些点称之为support vector<br>
+也就是说分类线上的点不一定都是支持向量，但是满足$\alpha_n$>0的点，一定是支持向量。<br>
+![sv](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_sv.png?raw=true)<br>
+
+***
+
+![svm_vs_pla](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_svmpla.png?raw=true)<br>
+$w_{SVM}$由fattest hyperplane边界上所有的SV决定，$w_{PLA}$由所有当前分类错误的点决定。<br>
+$w_{SVM}$和$w_{PLA}$都是原始数据点$y_nz_n$的线性组合形式，是原始数据的代表。<br>
+
+***
+
+![lastvs](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_lastvs.png?raw=true)<br>
+总结一下，本节课和上节课主要介绍了两种形式的SVM<br>
+一种是Primal Hard-Margin SVM，另一种是Dual Hard_Margin SVM。Primal Hard-Margin <br>SVM有$\hat d+1$个参数，有N个限制条件。当$\hat d+1$很大时，求解困难。<br>
+而Dual Hard_Margin SVM有N个参数，有N+1个限制条件。当数据量N很大时，也同样会增大计算难度。<br>
+两种形式都能得到w和b，求得fattest hyperplane。通常情况下，如果N不是很大，一般使用Dual SVM来解决问题。<br>
+
+
+### 总结
+本节课主要介绍了SVM的另一种形式：Dual SVM。我们这样做的出发点是为了移除计算过程对$\hat d$的依赖。Dual SVM的推导过程是通过引入拉格朗日因子$\alpha$，将SVM转化为新的非条件形式。然后，利用QP，得到最佳解的拉格朗日因子$\alpha$。再通过KKT条件，计算得到对应的w和b。最终求得fattest hyperplane。下一节课，我们将解决Dual SVM计算过程中对$\hat d$的依赖问题。
+
