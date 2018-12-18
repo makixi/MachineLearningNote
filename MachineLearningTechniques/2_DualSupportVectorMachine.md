@@ -26,6 +26,11 @@ $$L(b,w,\alpha)=\frac12w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b))$$
 <br>
 这个函数右边第一项是SVM的目标，第二项是SVM的条件和拉格朗日因子$\alpha_n$的乘积。我们把这个函数称为拉格朗日函数，其中包含三个参数：b，w，$\alpha_n$。<br>
 ![lagrange](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_lagrange.png?raw=true)<br>
+再利用拉格朗日函数，把SVM构成一个非条件问题。<br>
+![svm](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_svm.png?raw=true)<br>
+首先我们规定拉格朗日因子$\alpha_n\geq0$，根据SVM的限定条件可得：$(1-y_n(w^Tz_n+b))\leq0$，如果没有达到最优解，即有不满足$(1-y_n(w^Tz_n+b))\leq0$的情况，因为$\alpha_n\geq0$，那么必然有$\sum_n\alpha_n(1-y_n(w^Tz_n+b))\geq0$。对于这种大于零的情况，其最大值是无解的。<br>
+如果对于所有的点，均满足$(1-y_n(w^Tz_n+b))\leq0$，那么必然有$\sum_n\alpha_n(1-y_n(w^Tz_n+b))\leq0$，则当$\sum_n\alpha_n(1-y_n(w^Tz_n+b))=0$时，其有最大值，最大值就是我们SVM的目标：$\frac12w^Tw$。<br>
+因此，这种转化为非条件的SVM构造函数的形式是可行的。
 
 ---
 
