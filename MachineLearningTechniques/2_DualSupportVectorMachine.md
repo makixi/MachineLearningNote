@@ -86,9 +86,11 @@ $$\frac{\partial L(b,w,\alpha)}{\partial w}=0=w-\sum_{n=1}^N\alpha_ny_nz_n$$
 <br>
 SVM简化为只有$\alpha_n$的最佳化问题，即计算满足上述三个条件下，函数$-\frac12||\sum_{n=1}^N\alpha_ny_nz_n||^2+\sum_{n=1}^N\alpha_n$最小值时对应的$\alpha_n$是多少。<br>
 
+总结一下，SVM最佳化形式转化为只与$\alpha_n$有关：<br>
 
 ![svm_best](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_svmbest.png?raw=true)<br>
-
+<br>
+其中，满足最佳化的条件称之为Karush-Kuhn-Tucker(KKT)：<br>
 ![kkt](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_kkt.png?raw=true)<br>
 
 
