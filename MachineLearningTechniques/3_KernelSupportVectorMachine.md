@@ -118,4 +118,40 @@ $$g_{SVM}(x)=sign(\sum_{SV}\alpha_ny_nK(x_n,x)+b)=sign(\sum_{SV}\alpha_ny_ne^{(-
 ---
 
 ### 4.Comparison of Kernels
+对几种核进行比较。
 
+Linear Kernel是最基本最简单的核，平面上对应一条直线，三维空间内对应一个平面。<br>
+Linear Kernel可以使用Dual SVM中的QP直接计算得到。<br>
+![linear](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_linear.png?raw=true)<br>
+
+优点是计算简单、快速，可以直接使用QP快速得到参数值，而且从视觉上分类效果非常直观，便于理解<br>
+缺点是如果数据不是线性可分的情况，Linear Kernel就不能使用了。<br>
+![addis](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_addis.png?raw=true)<br>
+
+***
+
+Polynomial Kernel的hyperplanes是由多项式曲线构成。<br>
+![hyperplanes](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_duo.png?raw=true)<br>
+优点是阶数Q可以灵活设置，相比linear kernel限制更少，更贴近实际样本分布<br>
+缺点是当Q很大时，K的数值范围波动很大，而且参数个数较多，难以选择合适的值。<br>
+![hyperplanesad_disad](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_hyaddis.png?raw=true)<br>
+
+***
+
+对于Gaussian Kernel，表示为高斯函数形式。<br>
+![gaussian](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_ga.png?raw=true)<br>
+优点是边界更加复杂多样，能最准确地区分数据样本，数值计算K值波动较小，而且只有一个参数，容易选择<br>
+缺点是由于特征转换到无限维度中，w没有求解出来，计算速度要低于linear kernel，而且可能会发生过拟合。<br>
+![gaussianad_disad](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_gaaddis.png?raw=true)<br>
+
+***
+
+kernel代表的是两笔资料x和x'，特征变换后的相似性即内积。<br>
+但是不能说任何计算相似性的函数都可以是kernel。<br>
+有效的kernel还需满足几个条件：<br>
+1.K是对称的<br>
+2.K是半正定的<br>
+<br>
+这两个条件不仅是必要条件，同时也是充分条件。<br>
+只要我们构造的K同时满足这两个条件，那它就是一个有效的kernel(Mercer定理)<br>
+![kernel](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/3_kernel2.png?raw=true)<br>
