@@ -97,7 +97,30 @@ SVM简化为只有$\alpha_n$的最佳化问题，即计算满足上述三个条�
 ---
 
 ### 3.Solving Dual SVM 
+将max问题转化为min问题，再做一些条件整理和推导。<br>
+![convexQP](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_convexQP.png?raw=true)<br>
 
+
+![solveQP](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_solveQP.png?raw=true)<br>
+显然，这是一个convex的QP问题，且有N个变量$\alpha_n$，限制条件有N+1个。用QP解法，找到Q，p，A，c对应的值，用软件工具包进行求解即可。<br>
+<br>
+
+***
+
+![note](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_note.png?raw=true)<br>
+$q_{n,m}=y_ny_mz^T_nz_m$，大部分值是非零的，称为dense。<br>
+当N很大的时候，那么对应的$Q_D$的计算量将会很大，存储空间也很大。<br>
+
+***
+
+![solveKKT](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_solveKKT.png?raw=true)<br>
+得到$\alpha_n$之后，再根据之前的KKT条件，就可以计算出w和b了。<br>
+首先利用条件$w=\sum\alpha_ny_nz_n$得到w，然后利用条件$\alpha_n(1-y_n(w^Tz_n+b))=0$，取任一$\alpha_n\neq0$即$\alpha_n$>0的点，得到$1-y_n(w^Tz_n+b)=0$<br>
+进而求得$b=y_n-w^Tz_n$。<br>
+
+***
+
+值得注意的是，计算b值，$\alpha_n$>0时，有$y_n(w^Tz_n+b)=1$成立。$y_n(w^Tz_n+b)=1$正好表示的是该点在SVM分类线上，即fat boundary。也就是说，满足$\alpha_n$>0的点一定落在fat boundary上，这些点就是Support Vector。这是一个非常有趣的特性。
 
 ---
 
