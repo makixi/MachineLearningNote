@@ -52,11 +52,27 @@ $$L(b,w,\alpha)=\frac12w^Tw+\sum_{n=1}^N\alpha_n(1-y_n(w^Tz_n+b))$$
 ***
 
 已知$\geq$是一种弱对偶关系，在二次规划QP问题中，如果满足以下三个条件:<br>
-1.函数是凸的（convex primal）
-2.函数有解（feasible primal）
-3.条件是线性的（linear constraints）
+1.函数是凸的（convex primal）<br>
+2.函数有解（feasible primal）<br>
+3.条件是线性的（linear constraints）<br>
 
-那么，上述不等式关系就变成强对偶关系，$\geq$变成=，即一定存在满足条件的解$(b,w,\alpha)$，使等式左边和右边都成立，SVM的解就转化为右边的形式。
+那么，上述不等式关系就变成强对偶关系，$\geq$变成=，即一定存在满足条件的解$(b,w,\alpha)$，使等式左边和右边都成立，SVM的解就转化为右边的形式。<br>
+<br>
+经过推导，SVM对偶问题的解已经转化为无条件形式：<br>
+![dual_svm](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_dualsvm.png?raw=true)<br>
+上式括号里面的是对拉格朗日函数$L(b,w,\alpha)$计算最小值。<br>
+那么根据梯度下降算法思想:最小值位置满足梯度为零。<br>
+首先，令$L(b,w,\alpha)$对参数b的梯度为零:
+
+$$\frac{\partial L(b,w,\alpha)}{\partial b}=0=-\sum_{n=1}^N\alpha_ny_n$$
+
+那么，我们把这个条件代入计算max条件中（与$\alpha_n\geq0$同为条件），并进行化简：<br>
+![max_cal](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_maxcal.png?raw=true)<br>
+<br>
+这样，SVM表达式成功消去了b。<br>
+现在，令$L(b,w,\alpha)$对参数w的梯度为零:
+
+$$\frac{\partial L(b,w,\alpha)}{\partial w}=0=w-\sum_{n=1}^N\alpha_ny_nz_n$$
 
 ---
 
