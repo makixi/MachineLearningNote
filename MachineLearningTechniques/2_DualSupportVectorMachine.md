@@ -74,6 +74,24 @@ $$\frac{\partial L(b,w,\alpha)}{\partial b}=0=-\sum_{n=1}^N\alpha_ny_n$$
 
 $$\frac{\partial L(b,w,\alpha)}{\partial w}=0=w-\sum_{n=1}^N\alpha_ny_nz_n$$
 
+同样把这个条件带入原式并化简：<br>
+![max_cal2](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_maxcal2.png?raw=true)<br>
+
+***
+
+这样，SVM表达式成功消去了w。问题更加简化，这时候的条件有三个：<br>
+1. all $\alpha_n\geq0$<br>
+2. $\sum_{n=1}^N\alpha_ny_n=0$<br>
+3. $w=\sum_{n=1}^N\alpha_ny_nz_n$<br>
+<br>
+SVM简化为只有$\alpha_n$的最佳化问题，即计算满足上述三个条件下，函数$-\frac12||\sum_{n=1}^N\alpha_ny_nz_n||^2+\sum_{n=1}^N\alpha_n$最小值时对应的$\alpha_n$是多少。<br>
+
+
+![svm_best](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_svmbest.png?raw=true)<br>
+
+![kkt](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/2_kkt.png?raw=true)<br>
+
+
 ---
 
 ### 3.Solving Dual SVM 
