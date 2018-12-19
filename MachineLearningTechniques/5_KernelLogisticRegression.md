@@ -84,7 +84,43 @@ Logistic Regression和Soft-Margin SVM都是在最佳化$err{0/1}$的上界而已
 ---
 
 ### 3.SVM for Soft Binary Classification
+第一种简单的方法是先得到SVM的解$(b_{svm},w_{svm})$，然后直接代入到logistic regression中，得到$g(x)=\theta(w_{svm}^Tx+b_{svm})$。<br>
+这种方法直接使用了SVM和logistic regression的相似性，一般情况下表现还不错。<br>
+但是，这种形式过于简单，与logistic regression的关联不大，没有使用到logistic regression中好的性质和方法。<br>
+<br>
+第二种简单的方法是同样先得到SVM的解$(b_{svm},w_{svm})$，然后把$(b_{svm},w_{svm})$作为logistic regression的初始值，再进行迭代训练修正，速度比较快<br>
+最后，将得到的b和w代入到g(x)中。<br>
+但并没有比直接使用logistic regression快捷多少。
+![na](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_na.png?raw=true)<br>
+
+***
+
+构造一个融合两者优势的模型,我们额外增加了放缩因子A和平移因子B<br>
+首先利用SVM的解$(b_{svm},w_{svm})$来构造这个模型，放缩因子A和平移因子B是待定系数。<br>
+然后再用通用的logistic regression优化算法，通过迭代优化，得到最终的A和B。<br>
+一般来说，如果$(b_{svm},w_{svm})$较为合理的话，满足A>0且$B\approx0$。<br>
+![model](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_model.png?raw=true)<br>
+
+***
+
+得到了新的logistic regression:
+![newlog](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_newlog.png?raw=true)<br>
+
+***
+
+其中的$(b_{svm},w_{svm})$已经在SVM中解出来了，实际上的未知参数只有A和B两个<br>
+这种Probabilistic SVM的做法分为三个步骤：<br>
+![psvm](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_psvm.png?raw=true)<br>
+
+这种soft binary classifier方法得到的结果跟直接使用SVM classifier得到的结果可能不一样，这是因为我们引入了系数A和B<br>
+一般来说，soft binary classifier效果更好<br>
+logistic regression的解法，可以选择GD、SGD等等。
 
 ---
 
 ### 4.Kernel Logistic Regression
+![z](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_z.png?raw=true)<br>
+对于L2-regularized linear model，如果它的最小化问题形式为如下的话，那么最优解$w_*=\sum_{n=1}^N\beta_nz_n$。<br>
+![l2](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_l2.png?raw=true)<br>
+
+![klr](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_klr.png?raw=true)<br>
