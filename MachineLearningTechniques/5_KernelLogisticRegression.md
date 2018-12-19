@@ -123,4 +123,27 @@ logistic regression的解法，可以选择GD、SGD等等。
 对于L2-regularized linear model，如果它的最小化问题形式为如下的话，那么最优解$w_*=\sum_{n=1}^N\beta_nz_n$。<br>
 ![l2](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_l2.png?raw=true)<br>
 
+***
+
+假如最优解$w_=w_{||}+w_{\bot}$。<br>
+$w_{||}$和$w_{\bot}$分别是平行z空间和垂直z空间的部分。<br>
+我们需要证明的是$w_{\bot}=0$。<br>
+利用反证法，假如$w_{\bot}\neq0$，考虑$w_*$与$w_{||}$的比较。<br>
+第一步先比较最小化问题的第二项：$err(y,w_*^Tz_n)=err(y_n,(w_{||}+w_{\bot})^Tz_n=err(y_n,w_{||}^Tz_n)$，即第二项是相等的。<br>
+然后第二步比较第一项：$w_*^Tw_=w_{||}^Tw_{||}+2w_{||}^Tw_{\bot}+w_{\bot}^Tw_{\bot}>w_{||}^Tw_{||}$，即$w_*$对应的L2-regularized linear model值要比$w_{||}$大，这就说明$w_*$并不是最优解，从而证明$w_{\bot}$必然等于零，即$w_*=\sum_{n=1}^N\beta_nz_n$一定成立，$w_*$一定可以写成z的线性组合形式。<br>
+![solve](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_solve.png?raw=true)<br>
+
+***
+
+将$w_=\sum_{n=1}^N\beta_nz_n$代入到L2-regularized logistic regression最小化问题中，得到：<br>
+![solvel2](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_solvel2.png?raw=true)<br>
+
+***
+
+从另外一个角度来看Kernel Logistic Regression（KLR）：<br>
 ![klr](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_klr.png?raw=true)<br>
+上式中log项里的$\sum_{m=1}^N\beta_mK(x_m,x_n)$可以看成是变量$\beta$和$K(x_m,x_n)$的内积。<br>
+上式第一项中的$\sum_{n=1}^N\sum_{m=1}^N\beta_n\beta_mK(x_n,x_m)$可以看成是关于$\beta$的正则化项$\beta^TK\beta$。<br>
+所以，KLR是$\beta$的线性组合，其中包含了kernel内积项和kernel regularizer。这与SVM是相似的形式。<br>
+<br>
+KLR中的$\beta_n$与SVM中的$\alpha_n$是有区别的。SVM中的$\alpha_n$大部分为零，SV的个数通常是比较少的；而KLR中的$\beta_n$通常都是非零值。
