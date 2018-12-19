@@ -36,6 +36,50 @@ L2 Regularization中的$\lambda$和Soft-Margin SVM中的C也是相互对应的�
 ---
 
 ### 2.SVM versus Logistic Regression
+我们已经把Soft-Margin SVM转换成无条件的形式：<br>
+![wu](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_wu.png?raw=true)<br>
+$max(1-y_n(w^Tz_n+b),0)$倍设置为$\hat{err}$<br>
+
+***
+
+![01](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_01.png?raw=true)<br>
+对于$err_{0/1}$，它的linear score $s=w^Tz_n+b$<br>
+当$ys\geq0$时，$err_{0/1}=0$<br>
+当$ys<0$时，$err_{0/1}=1$，呈阶梯状。<br>
+<br>
+对于$\hat{err}$，当$ys\geq0$时，$err_{0/1}=0$<br>
+当$ys<0$时，$err_{0/1}=1-ys$，呈折线状。<br>
+<br>
+$\hat{err}_{svm}$始终在$err_{0/1}$的上面，则$\hat{err}_{svm}$可作为$err{0/1}$的上界。<br>
+所以，可以使用$\hat{err}_{svm}$来代替$err{0/1}$，解决二元线性分类问题，而且$\hat{err}_{svm}$是一个凸函数，使它在最佳化问题中有更好的性质。
+
+***
+
+![sce](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_sce.png?raw=true)<br>
+逻辑回归中，$err_{sce}=log_2(1+exp(-ys))$，当ys=0时，$err_{sce}=1$。
+
+$err_{sce}$也是$err_{0/1}$的上界，而$err_{sce}$与$\hat{err}_{svm}$也是比较相近的。<br>
+因为当ys趋向正无穷大的时候，$err_{sce}$和$\hat{err}_{svm}$都趋向于零；<br>
+当ys趋向负无穷大的时候，$err_{sce}$和$\hat{err}_{svm}$都趋向于正无穷大。<br>
+可以把SVM看成是L2-regularized logistic regression。
+
+***
+
+![sum](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/5_sum.png?raw=true)<br>
+**PLA**是相对简单的一个模型，对应的是$err_{0/1}$<br>
+通过不断修正错误的点来获得最佳分类线<br>
+优点是简单快速<br>
+缺点是只对线性可分的情况有用，线性不可分的情况需要用到pocket算法。<br>
+<br>
+Logistic Regression对应的是$err_{sce}$，通常使用GD/SGD算法求解最佳分类线。<br>
+优点是凸函数$err_{sce}$便于最优化求解，而且有regularization作为避免过拟合的保证<br>
+缺点是$err_{sce}$作为$err_{0/1}$的上界，当ys很小（负值）时，上界变得更宽松，不利于最优化求解。<br>
+<br>
+Soft-Margin SVM对应的是$\hat{err}{svm}$，通常使用QP求解最佳分类线。<br>
+优点和Logistic Regression一样，凸优化问题计算简单而且分类线比较“粗壮”一些<br>
+缺点也和Logistic Regression一样，当ys很小（负值）时，上界变得过于宽松。<br>
+<br>
+Logistic Regression和Soft-Margin SVM都是在最佳化$err{0/1}$的上界而已。
 
 ---
 
