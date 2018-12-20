@@ -239,3 +239,91 @@ $$min\ \sum_{n=1}^N((h(x_n)-(y_n-s_n))^2)$$
 在平方误差上尽可能接近其实很简单，就是使用regression的方法，对所有N个点$(x_n,y_n-s_n)$做squared-error的regression，得到的回归方程就是我们要求的$g_t(x_n)$。
 
 ![27](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_27.png?raw=true)<br>
+
+以上就是使用GradientBoost的思想来解决regression问题的方法，其中应用了一个非常重要的概念，就是余数$y_n-s_n$。<br>
+根据这些余数做regression，得到好的矩$g_t(x_n)$，方向函数$g_t(x_n)$也就是由余数决定的。
+
+![28](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_28.png?raw=true)<br>
+
+在求出最好的方向函数$g_t(x_n)$之后，就要来求相应的步进长度$\eta$。表达式如下：
+
+![29](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_29.png?raw=true)<br>
+
+同样，对上式进行推导和化简，得到如下表达式：
+
+![30](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_30.png?raw=true)<br>
+
+上式中也包含了余数$y_n-s_n$，其中$g_t(x_n)$可以看成是$x_n$的特征转换，是已知量。<br>
+那么，如果想要让上式最小化，求出对应的$\eta$的话，只要让$\eta g_t(x_n)$尽可能地接近余数$y_n-s_n$即可。<br>
+这也是一个regression问题，而且是一个很简单的形如y=ax的线性回归，只有一个未知数$\eta$。只要对所有N个点$(\eta g_t(x_n),y_n-s_n)$做squared-error的linear regression，利用梯度下降算法就能得到最佳的$\eta$。
+
+将上述这些概念合并到一起，就得到了一个最终的演算法Gradient Boosted Decision Tree(GBDT)。<br>
+在计算方向函数$g_t$的时候，是对所有N个点$(x_n,y_n-s_n)$做squared-error的regression。那么这个回归算法就可以是决策树C&RT模型（决策树也可以用来做regression）。这样，就引入了Decision Tree，并将GradientBoost和Decision Tree结合起来，构成了真正的GBDT算法。<br>
+<br>
+GBDT算法的基本流程图如下所示：
+
+![31](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_31.png?raw=true)<br>
+
+$s_n$的初始值一般均设为0，即$s_1=s_2=\cdots =s_N=0$。<br>
+每轮迭代中，方向函数$g_t$通过C&RT算法做regression，进行求解；步进长度$\eta$通过简单的单参数线性回归进行求解；然后每轮更新$s_n$的值，即$s_n\leftarrow s_n+\alpha_tg_t(x_n)$。<br>
+T轮迭代结束后，最终得到$G(x)=\sum_{t=1}^T\alpha_tg_t(x)$。
+
+可以说GBDT就是AdaBoost-DTree的regression版本。
+
+![32](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_32.png?raw=true)<br>
+
+---
+
+### 4.Summary ofAggregation Models
+blending就是将所有已知的$g_t$ aggregate结合起来，发挥集体的智慧得到G。值得注意的一点是这里的$g_t$都是已知的。<br>
+<br>
+blending通常有三种形式：<br>
+1.uniform：简单地计算所有$g_t$的平均值<br>
+2.non-uniform：所有$g_t$的线性组合<br>
+3.conditional：所有$g_t$的非线性组合<br>
+
+其中，uniform采用投票、求平均的形式更注重稳定性；<br>
+而non-uniform和conditional追求的更复杂准确的模型，但存在过拟合的危险。
+
+![33](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_33.png?raw=true)<br>
+
+blending是建立在所有$g_t$已知的情况。<br>
+那如果所有$g_t$未知的情况，对应的就是learning模型，做法就是一边学$g_t$，一边将它们结合起来。<br>
+<br>
+learning通常也有三种形式（与blending的三种形式一一对应）：<br>
+1.Bagging：通过bootstrap方法，得到不同$g_t$，计算所有$g_t$的平均值<br>
+2.AdaBoost：通过bootstrap方法，得到不同$g_t$，所有$g_t$的线性组合<br>
+3.Decision Tree：通过数据分割的形式得到不同的$g_t$，所有$g_t$的非线性组合<br>
+
+将AdaBoost延伸到另一个模型GradientBoost。<br>
+对于regression问题，GradientBoost通过residual fitting的方式得到最佳的方向函数$g_t$和步进长度$\eta$。
+
+![34](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_34.png?raw=true)<br>
+
+除了这些基本的aggregation模型之外，我们还可以把某些模型结合起来得到新的aggregation模型。<br>
+例如，Bagging与Decision Tree结合起来组成了Random Forest。<br>
+Random Forest中的Decision Tree是比较“茂盛”的树，即每个树的$g_t$都比较强一些。<br>
+AdaBoost与Decision Tree结合组成了AdaBoost-DTree。<br>
+AdaBoost-DTree的Decision Tree是比较“矮弱”的树，即每个树的$g_t$都比较弱一些，由AdaBoost将所有弱弱的树结合起来，让综合能力更强。<br>
+同样，GradientBoost与Decision Tree结合就构成了经典的算法GBDT。
+
+![35](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_35.png?raw=true)<br>
+
+Aggregation的核心是将所有的$g_t$结合起来，融合到一起，即集体智慧的思想。这种做法之所以能得到很好的模型G，是因为aggregation具有两个方面的优点：cure underfitting和cure overfitting。
+
+第一，aggregation models有助于防止欠拟合（underfitting）。它把所有比较弱的$g_t$结合起来，利用集体智慧来获得比较好的模型G。aggregation就相当于是feature transform，来获得复杂的学习模型。
+
+第二，aggregation models有助于防止过拟合（overfitting）。它把所有$g_t$进行组合，容易得到一个比较中庸的模型，类似于SVM的large margin一样的效果，从而避免一些极端情况包括过拟合的发生。从这个角度来说，aggregation起到了regularization的效果。
+
+由于aggregation具有这两个方面的优点，所以在实际应用中aggregation models都有很好的表现。
+
+![36](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/11_36.png?raw=true)<br>
+
+---
+
+### 5.Summary 
+Gradient Boosted Decision Tree。<br>
+首先讲如何将AdaBoost与Decision Tree结合起来，即通过sampling和pruning的方法得到AdaBoost-D Tree模型。<br>
+然后，我们从optimization的角度来看AdaBoost，找到好的hypothesis也就是找到一个好的方向，找到权重$\alpha$也就是找到合适的步进长度。<br>
+接着，我们从binary classification的0/1 error推广到其它的error function，从Gradient Boosting角度推导了regression的squared error形式。Gradient Boosting其实就是不断迭代，做residual fitting。并将其与Decision Tree算法结合，得到了经典的GBDT算法。<br>
+最后，我们将所有的aggregation models做了总结和概括，这些模型有的能防止欠拟合有的能防止过拟合，应用十分广泛。
