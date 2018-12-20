@@ -108,6 +108,8 @@ $\epsilon$是可设置的常数，是SVR问题中独有的，SVM中没有这个�
 另外，SVR的QP形式共有$\hat{d}+1+2N$个参数，2N+2N个条件。<br>
 ![18](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/6_18.png?raw=true)<br>
 
+---
+
 ### 3.Support Vector Regression Dual
 先令拉格朗日因子$\alpha^{\bigvee}$和$\alpha^{\bigwedge}$，分别是与$\xi_n^{\bigvee}$和$\xi_n^{\bigwedge}$不等式相对应。<br>
 ![19](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/6_19.png?raw=true)<br>
@@ -131,6 +133,8 @@ $$w=\sum_{n=1}^N(\alpha_n^{\bigwedge}-\alpha_n^{\bigvee})z_n$$
 所以，对于分布在tube内的点，得到的解$\beta_n=0$，是sparse的。<br>
 而分布在tube之外的点，$\beta_n\neq0$。<br>
 至此，我们就得到了SVR的sparse解。
+
+---
 
 ### 4.Summary of Kernel Models
 ![23](https://github.com/makixi/MachineLearningNote/blob/master/MachineLearningTechniques/pic/6_23.png?raw=true)<br>
