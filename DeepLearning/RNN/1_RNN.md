@@ -203,25 +203,26 @@ RNN的隐藏层单元结构如下图所示：
 ![12](https://github.com/makixi/MachineLearningNote/blob/master/DeepLearning/RNN/pic/1_12.png?raw=true)
 
 $a^{<t>}$的表达式为：
-$$a^{&lt; t &gt;}=tanh(W_a[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_a)$$
+$$a^{< t >}=tanh(W_a[a^{< t-1 >},x^{< t >}]+b_a)$$
 
-为了解决梯度消失问题，对上述单元进行修改，添加了记忆单元，构建GRU，如下图所示：
+**为了解决梯度消失问题**，对上述单元进行修改，添加了记忆单元，构建GRU，如下图所示：
 
 ![13](https://github.com/makixi/MachineLearningNote/blob/master/DeepLearning/RNN/pic/1_13.png?raw=true)
 
 相应的表达式为：
-$$\tilde c^{&lt; t &gt;}=tanh(W_c[c^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_c)$$ 
-$$\Gamma_u=\sigma(W_u[c^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_u)$$
-$$c^{&lt; t &gt;}=\Gamma*\tilde c^{&lt; t &gt;}+(1-\Gamma_u)*c^{&lt; t-1 &gt;}$$
+$$\tilde c^{< t >}=tanh(W_c[c^{< t-1 >},x^{< t >}]+b_c)$$ 
+$$\Gamma_u=\sigma(W_u[c^{< t-1 >},x^{< t >}]+b_u)$$
+$$c^{< t >}=\Gamma*\tilde c^{< t >}+(1-\Gamma_u)*c^{< t-1 >}$$
 
-其中，$c^{&lt; t-1 &gt;}=a^{&lt; t-1 &gt;}$，$c^{&lt; t &gt;}=a^{&lt; t &gt;}$。$\Gamma_u$意为gate，记忆单元。当$\Gamma_u=1$时，代表更新；当$\Gamma_u=0$时，代表记忆，保留之前的模块输出。这一点跟CNN中的ResNets的作用有点类似。因此，$\Gamma_u$能够保证RNN模型中跨度很大的依赖关系不受影响，消除梯度消失问题。
+其中，$c^{< t-1 >}=a^{< t-1 >}$，$c^{< t >}=a^{< t >}$。$\Gamma_u$意为gate，记忆单元。<br>
+**当$\Gamma_u=1$时，代表更新；当$\Gamma_u=0$时，代表记忆，保留之前的模块输出**。这一点跟CNN中的ResNets的作用有点类似。因此，$\Gamma_u$能够保证RNN模型中跨度很大的依赖关系不受影响，消除梯度消失问题。
 
 上面介绍的是简化的GRU模型，完整的GRU添加了另外一个gate，即$\Gamma_r$，表达式如下：
-$$\tilde c^{&lt; t &gt;}=tanh(W_c[\Gamma_r*c^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_c)$$
-$$\Gamma_u=\sigma(W_u[c^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_u)$$
-$$\Gamma_r=\sigma(W_r[c^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_r)$$
-$$c^{&lt; t &gt;}=\Gamma*\tilde c^{&lt; t &gt;}+(1-\Gamma_u)*c^{&lt; t-1 &gt;}$$
-$$a^{&lt; t &gt;}=c^{&lt; t &gt;}$$
+$$\tilde c^{< t >}=tanh(W_c[\Gamma_r*c^{< t-1 >},x^{< t >}]+b_c)$$
+$$\Gamma_u=\sigma(W_u[c^{< t-1 >},x^{< t >}]+b_u)$$
+$$\Gamma_r=\sigma(W_r[c^{< t-1 >},x^{< t >}]+b_r)$$
+$$c^{< t >}=\Gamma*\tilde c^{< t >}+(1-\Gamma_u)*c^{< t-1 >}$$
+$$a^{< t >}=c^{< t >}$$
 
 注意，以上表达式中的 * ∗表示元素相乘，而非矩阵相乘。
 
@@ -233,22 +234,22 @@ LSTM是另一种更强大的解决梯度消失问题的方法。它对应的RNN�
 ![14](https://github.com/makixi/MachineLearningNote/blob/master/DeepLearning/RNN/pic/1_14.png?raw=true)
 
 相应的表达式为：
-$$\tilde c^{&lt; t &gt;}=tanh(W_c[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_c)$$
-$$\Gamma_u=\sigma(W_u[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_u)$$
-$$\Gamma_f=\sigma(W_f[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_f)$$
-$$\Gamma_o=\sigma(W_o[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_o)$$
-$$c^{&lt; t &gt;}=\Gamma_u*\tilde c^{&lt; t &gt;}+\Gamma_f*c^{&lt; t-1 &gt;}$$
-$$a^{&lt; t &gt;}=\Gamma_o*c^{&lt; t &gt;}$$
+$$\tilde c^{< t >}=tanh(W_c[a^{< t-1 >},x^{< t >}]+b_c)$$
+$$\Gamma_u=\sigma(W_u[a^{< t-1 >},x^{< t >}]+b_u)$$
+$$\Gamma_f=\sigma(W_f[a^{< t-1 >},x^{< t >}]+b_f)$$
+$$\Gamma_o=\sigma(W_o[a^{< t-1 >},x^{< t >}]+b_o)$$
+$$c^{< t >}=\Gamma_u*\tilde c^{< t >}+\Gamma_f*c^{< t-1 >}$$
+$$a^{< t >}=\Gamma_o*c^{< t >}$$
 
 LSTM包含三个gates：$\Gamma_u$，$\Gamma_f$，$\Gamma_o$，分别对应update gate，forget gate和output gate。
 
-如果考虑$c^{&lt; t-1 &gt;}$对$\Gamma_u$，$\Gamma_f$，$\Gamma_o$的影响，可加入peephole connection，对LSTM的表达式进行修改：
-$$\tilde c^{&lt; t &gt;}=tanh(W_c[a^{&lt; t-1 &gt;},x^{&lt; t &gt;}]+b_c)$$
-$$\Gamma_u=\sigma(W_u[a^{&lt; t-1 &gt;},x^{&lt; t &gt;},c^{&lt; t-1 &gt;}]+b_u)$$
-$$\Gamma_f=\sigma(W_f[a^{&lt; t-1 &gt;},x^{&lt; t &gt;},c^{&lt; t-1 &gt;}]+b_f)$$
-$$\Gamma_o=\sigma(W_o[a^{&lt; t-1 &gt;},x^{&lt; t &gt;},c^{&lt; t-1 &gt;}]+b_o)$$
-$$c^{&lt; t &gt;}=\Gamma_u*\tilde c^{&lt; t &gt;}+\Gamma_f*c^{&lt; t-1 &gt;}$$
-$$a^{&lt; t &gt;}=\Gamma_o*c^{&lt; t &gt;}$$
+如果考虑$c^{< t-1 >}$对$\Gamma_u$，$\Gamma_f$，$\Gamma_o$的影响，可加入peephole connection，对LSTM的表达式进行修改：
+$$\tilde c^{< t >}=tanh(W_c[a^{< t-1 >},x^{< t >}]+b_c)$$
+$$\Gamma_u=\sigma(W_u[a^{< t-1 >},x^{< t >},c^{< t-1 >}]+b_u)$$
+$$\Gamma_f=\sigma(W_f[a^{< t-1 >},x^{< t >},c^{< t-1 >}]+b_f)$$
+$$\Gamma_o=\sigma(W_o[a^{< t-1 >},x^{< t >},c^{< t-1 >}]+b_o)$$
+$$c^{< t >}=\Gamma_u*\tilde c^{< t >}+\Gamma_f*c^{< t-1 >}$$
+$$a^{< t >}=\Gamma_o*c^{< t >}$$
 
 GRU可以看成是简化的LSTM，两种方法都具有各自的优势。
 
@@ -259,8 +260,8 @@ GRU可以看成是简化的LSTM，两种方法都具有各自的优势。
 
 ![15](https://github.com/makixi/MachineLearningNote/blob/master/DeepLearning/RNN/pic/1_15.png?raw=true)
 
-BRNN对应的输出$y^{&lt; t &gt;}$表达式为：
-$$\hat y^{&lt; t &gt;}=g(W_{y}[a^{\rightarrow &lt; t &gt;},a^{\leftarrow &lt; t &gt;}]+b_y)$$
+BRNN对应的输出$y^{< t >}$表达式为：
+$$\hat y^{< t >}=g(W_{y}[a^{\rightarrow < t >},a^{\leftarrow < t >}]+b_y)$$
 
 BRNN能够同时对序列进行双向处理，性能大大提高。但是计算量较大，且在处理实时语音时，需要等到完整的一句话结束时才能进行分析。
 
@@ -271,8 +272,8 @@ Deep RNNs由多层RNN组成，其结构如下图所示：
 
 ![16](https://github.com/makixi/MachineLearningNote/blob/master/DeepLearning/RNN/pic/1_16.png?raw=true)
 
-与DNN一样，用上标$[l]$表示层数。Deep RNNs中$a^{[l]&lt; t &gt;}$的表达式为：
-$$a^{[l]&lt; t &gt;}=g(W_a^{[l]}[a^{[l]&lt; t-1 &gt;},a^{[l-1]&lt; t &gt;}]+b_a^{[l]})$$
+与DNN一样，用上标$[l]$表示层数。Deep RNNs中$a^{[l]< t >}$的表达式为：
+$$a^{[l]< t >}=g(W_a^{[l]}[a^{[l]< t-1 >},a^{[l-1]< t >}]+b_a^{[l]})$$
 
 DNN层数可达100多，而Deep RNNs一般没有那么多层，3层RNNs已经较复杂了。
 
